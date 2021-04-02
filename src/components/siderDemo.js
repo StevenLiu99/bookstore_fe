@@ -51,7 +51,9 @@ export class SiderDemo extends React.Component {
                         </Menu.Item>
 
                         <Menu.Item key="3" icon={<ShoppingCartOutlined />}>
+                            <Link to="/cart">
                             购物车
+                            </Link>
                         </Menu.Item>
                         <Menu.Item key="4" icon={<CarryOutOutlined />}>
                             订单管理

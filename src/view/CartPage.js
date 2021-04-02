@@ -57,7 +57,7 @@ export class CartPage extends React.Component{
             <Layout>
                 <HeaderDemo/>
                 <Layout style={{ minHeight: '100vh' }}>
-                    <SiderDemo selected={["2"]}/>
+                    <SiderDemo selected={["3"]}/>
                     <Content style={{ padding: '0 16px' }}>
                         <div className="home-content">
                             <div className="myCart">

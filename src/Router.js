@@ -25,7 +25,7 @@ class BasicRoute extends React.Component{
         return(
             <Router history={history}>
                 <Switch>
-                    <Route exact path="/" component={CartPage} />
+                    <Route exact path="/" component={HomePage} />
                     <Route exact path="/login" component={LoginPage} />
                     <Route exact path="/bookDetails" component={BookPage} />
                     <Route exact path="/bookList" component={BookListPage} />

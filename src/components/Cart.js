@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Table, Button} from 'antd';
-
+import "../css/cart.css"
 
 const columns = [
     {
@@ -69,6 +69,13 @@ export class Cart extends React.Component{
             onChange: this.onSelectChange,
         };
         const hasSelected = selectedRowKeys.length > 0;
+
+        let totalPrice = 0;
+        selectedRowKeys.forEach((total) => {
+            totalPrice += total;
+        });
+
+
         return (
             <div className="myCart">
                 <div style={{ marginBottom: 16 }}>
@@ -78,7 +85,11 @@ export class Cart extends React.Component{
                     <span style={{ marginLeft: 8 }}>
             {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
           </span>
-                    <Button type="primary" onClick={this.start} disabled={!hasSelected} loading={loading}>
+                    <span className="totalprice">
+                        {totalPrice}
+                    </span>
+
+                    <Button className="buyButton" type="primary" disabled={!hasSelected} loading={loading}>
                         确定购买
                     </Button>
                 </div>
