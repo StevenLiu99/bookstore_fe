@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
-import { Table, Button} from 'antd';
+import { Table, Button,Typography} from 'antd';
 import "../css/cart.css"
-
+import {Link} from "react-router-dom";
+const { Text } = Typography;
 const columns = [
     {
         title: '商品信息',
@@ -44,6 +45,7 @@ export class Cart extends React.Component{
     state = {
         selectedRowKeys: [], // Check here to configure the default column
         loading: false,
+        totalprice: 0,
     };
 
     start = () => {
@@ -57,43 +59,48 @@ export class Cart extends React.Component{
         }, 1000);
     };
 
-    onSelectChange = selectedRowKeys => {
+    onSelectChange = (selectedRowKeys) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
+        console.log(selectedRowKeys[0]);
         this.setState({ selectedRowKeys });
+        this.state.totalprice = 0;
+        for (var i=0;i<selectedRowKeys.length;i++)
+        {
+            this.state.totalprice += data[selectedRowKeys[i]].total;
+        }
+
+
     };
 
     render() {
-        const { loading, selectedRowKeys } = this.state;
+        const { loading, selectedRowKeys,totalprice } = this.state;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
         };
         const hasSelected = selectedRowKeys.length > 0;
 
-        let totalPrice = 0;
-        selectedRowKeys.forEach((total) => {
-            totalPrice += total;
-        });
-
 
         return (
             <div className="myCart">
                 <div style={{ marginBottom: 16 }}>
                     <Button type="primary" onClick={this.start} disabled={!hasSelected} loading={loading}>
-                        刷新
+                        删除
                     </Button>
                     <span style={{ marginLeft: 8 }}>
-            {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
+            {hasSelected ? `选中 ${selectedRowKeys.length} 件商品` : ''}
           </span>
-                    <span className="totalprice">
-                        {totalPrice}
-                    </span>
-
+                    <Link to="/orders">
                     <Button className="buyButton" type="primary" disabled={!hasSelected} loading={loading}>
                         确定购买
                     </Button>
+                    </Link>
+                    <span className="totalprice">
+                        总计{this.state.totalprice}元
+                    </span>
                 </div>
-                <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+                <Table
+                    rowSelection={rowSelection} columns={columns} dataSource={data} />
             </div>
         );
     }

@@ -4,35 +4,7 @@ import { Table, Input, InputNumber, Popconfirm, Form, Typography,Space } from 'a
 
 const { Search } = Input;
 
-let datasource = [
-    {
-        key:"1",
-        name:"A Simple Book",
-        author:"Jack",
-        type:"教育",
-        price:55.0,
-        inventory: 200,
 
-    },
-    {
-        key:"2",
-        name:"A Complex Book",
-        author:"Tom",
-        type:"科技",
-        price:98.5,
-        inventory: 20,
-
-    },
-    {
-        key:"3",
-        name:"Java核心技术卷II",
-        author:"凯S.霍斯特曼",
-        type:"编程",
-        price:95.2,
-        inventory: 200,
-
-    },
-]
 
 
 interface Item {
@@ -140,6 +112,14 @@ const EditableTable = (props)=> {
 
     const columns = [
         {
+            title: '封面',
+            dataIndex: 'image',
+            key: 'image',
+            render:(record)=><img src={record} width="100px" />,
+            editable: false,
+
+        },
+        {
             title: '书名',
             dataIndex: 'name',
             key: 'name',
@@ -153,9 +133,9 @@ const EditableTable = (props)=> {
             editable: true,
         },
         {
-            title: '分类',
-            dataIndex: 'type',
-            key: 'type',
+            title: 'ISBN号',
+            dataIndex: 'isbn',
+            key: 'isbn',
             editable: true,
         },
         {

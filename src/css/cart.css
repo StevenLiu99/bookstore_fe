@@ -5,3 +5,9 @@
 .buyButton{
     float: right;
 }
+.totalprice{
+    float: right;
+    margin-right: 30px;
+    font-size: large;
+    color: crimson;
+}

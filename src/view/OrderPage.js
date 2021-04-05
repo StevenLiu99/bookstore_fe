@@ -3,18 +3,17 @@ import {Layout} from 'antd'
 import {HeaderDemo} from "../components/headerDemo";
 import {withRouter} from "react-router-dom";
 import {SiderDemo} from "../components/siderDemo";
-import {BookList} from "../components/BookList";
-import "../css/bookList.css"
+import {Orders} from "../components/Orders";
+import "../css/orders.css"
+
 
 const { Header, Content, Footer } = Layout;
 
 let datasource = [
     {
         key:"1",
-        image:"http://img3m9.ddimg.cn/12/36/1546133799-1_w_1.jpg",
         name:"A Simple Book",
         author:"Jack",
-        isbn:"123",
         type:"教育",
         price:55.0,
         inventory: 200,
@@ -22,10 +21,8 @@ let datasource = [
     },
     {
         key:"2",
-        image:"http://img3m9.ddimg.cn/12/36/1546133799-1_w_1.jpg",
         name:"A Complex Book",
         author:"Tom",
-        isbn:"456",
         type:"科技",
         price:98.5,
         inventory: 20,
@@ -33,10 +30,8 @@ let datasource = [
     },
     {
         key:"3",
-        image:"http://img3m9.ddimg.cn/12/36/1546133799-1_w_1.jpg",
         name:"Java核心技术卷II",
         author:"凯S.霍斯特曼",
-        isbn:"234",
         type:"编程",
         price:95.2,
         inventory: 200,
@@ -45,7 +40,7 @@ let datasource = [
 ]
 
 
-export class BookListPage extends React.Component{
+export class OrderPage extends React.Component{
 
     constructor(props) {
         super(props);
@@ -62,11 +57,11 @@ export class BookListPage extends React.Component{
             <Layout>
                 <HeaderDemo/>
                 <Layout style={{ minHeight: '100vh' }}>
-                    <SiderDemo selected={["2"]}/>
+                    <SiderDemo selected={["3"]}/>
                     <Content style={{ padding: '0 16px' }}>
                         <div className="home-content">
-                            <div className="bookList">
-                            <BookList initialData={datasource}/>
+                            <div className="myOrders">
+                                <Orders />
                             </div>
                             <div className={"foot-wrapper"}>
                             </div>
@@ -76,25 +71,9 @@ export class BookListPage extends React.Component{
 
             </Layout>
 
-            // <Layout className="layout">
-            //
-            //     <Header>
-            //         <HeaderDemo />
-            //     </Header>
-            //     <Layout>
-            //         <SideBar />
-            //         <Content style={{ padding: '0 50px' }}>
-            //             <div className="home-content">
-            //                 <bookDetail.js info={this.state.bookInfo} />
-            //
-            //                 <div className={"foot-wrapper"}>
-            //                 </div>
-            //             </div>
-            //         </Content>
-            //     </Layout>
-            // </Layout>
+
         );
     }
 }
 
-export default withRouter(BookListPage);
+export default withRouter(OrderPage);

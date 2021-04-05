@@ -8,6 +8,7 @@ import LoginPage from "./view/LoginPage";
 import {BookPage} from "./view/BookPage"
 import {BookListPage} from "./view/BookListPage";
 import CartPage from "./view/CartPage";
+import {OrderPage} from "./view/OrderPage";
 
 
 class BasicRoute extends React.Component{
@@ -30,6 +31,7 @@ class BasicRoute extends React.Component{
                     <Route exact path="/bookDetails" component={BookPage} />
                     <Route exact path="/bookList" component={BookListPage} />
                     <Route exact path="/cart" component={CartPage}/>
+                    <Route exact path="/orders" component={OrderPage}/>
                     {/*<Redirect from="/*" to="/" />*/}
                 </Switch>
 
