@@ -1,7 +1,8 @@
 import React from 'react';
-import { Layout, Menu } from 'antd';
+import { Space,Layout, Menu } from 'antd';
 import "../css/header.css"
 import {Link} from 'react-router-dom'
+import {AccountBookOutlined} from "@ant-design/icons";
 
 const { SubMenu } = Menu;
 const { Header } = Layout;
@@ -12,7 +13,7 @@ export class HeaderDemo extends React.Component {
 
         return(
             <Header className="header" style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
-                <div className="logo" />
+                <div className="logo" ><Space size="middle"><AccountBookOutlined />Book Store</Space></div>
 
                 <Menu theme="dark" mode="horizontal" >
                     <SubMenu key="SubMenu" title="UserName" className="userinfo">
