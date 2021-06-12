@@ -6,10 +6,29 @@ import {
     PlusSquareOutlined ,
     PayCircleOutlined
 } from '@ant-design/icons';
+import {addIntoCart} from "../service/cartService";
+
 
 
 
 export class BookDetail extends React.Component{
+    constructor(props) {
+        super(props);
+        // let user = localStorage.getItem("user");
+        // let user_id = localStorage.getItem("userId")
+        // console.log(user);
+        // console.log(user_id);
+        //
+    }
+
+    onAdd = () => {
+        let user = localStorage.getItem("user");
+        let user_id = parseInt(localStorage.getItem("userId"));
+        console.log(user_id);
+        let book_id = this.props.info.id;
+        console.log('Success:', {user_id,book_id});
+        addIntoCart(user_id,book_id);
+    };
 
 
     render() {
@@ -36,7 +55,7 @@ export class BookDetail extends React.Component{
                     </div>
                 </div>
                 <div className={"button-groups"}>
-                    <Button   size={"large"}>
+                    <Button onClick={this.onAdd} size={"large"}>
                         <PlusSquareOutlined />
                         加入购物车
                     </Button>

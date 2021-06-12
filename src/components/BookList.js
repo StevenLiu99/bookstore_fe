@@ -1,49 +1,32 @@
 
 import React, { useState } from 'react';
 import { Table, Input, InputNumber, Popconfirm, Form, Typography,Space } from 'antd';
+import {deleteOne, getBooks, updateBook} from "../service/bookService";
+import {history} from '../utils/history'
 
 const { Search } = Input;
 
 
 
-
-interface Item {
-    key: string;
-    name: string;
-    author: string;
-    type: string;
-    price: number;
-    inventory:number;
-}
-
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-    editing: boolean;
-    dataIndex: string;
-    title: any;
-    inputType: 'number' | 'text';
-    record: Item;
-    index: number;
-    children: React.ReactNode;
-}
-
-const EditableCell: React.FC<EditableCellProps> = ({
-                                                       editing,
-                                                       dataIndex,
-                                                       title,
-                                                       inputType,
-                                                       record,
-                                                       index,
-                                                       children,
-                                                       ...restProps
-                                                   }) => {
+const EditableCell = ({
+                          editing,
+                          dataIndex,
+                          title,
+                          inputType,
+                          record,
+                          index,
+                          children,
+                          ...restProps
+                      }) => {
     const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-
     return (
         <td {...restProps}>
             {editing ? (
                 <Form.Item
                     name={dataIndex}
-                    style={{ margin: 0 }}
+                    style={{
+                        margin: 0,
+                    }}
                     rules={[
                         {
                             required: true,
@@ -59,18 +42,73 @@ const EditableCell: React.FC<EditableCellProps> = ({
         </td>
     );
 };
+
+// interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+//     editing: boolean;
+//     dataIndex: string;
+//     title: any;
+//     inputType: 'number' | 'text';
+//     record: Item;
+//     index: number;
+//     children: React.ReactNode;
+// }
+//
+// const EditableCell: React.FC<EditableCellProps> = ({
+//                                                        editing,
+//                                                        dataIndex,
+//                                                        title,
+//                                                        inputType,
+//                                                        record,
+//                                                        index,
+//                                                        children,
+//                                                        ...restProps
+//                                                    }) => {
+//     const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+//
+//     return (
+//         <td {...restProps}>
+//             {editing ? (
+//                 <Form.Item
+//                     name={dataIndex}
+//                     style={{ margin: 0 }}
+//                     rules={[
+//                         {
+//                             required: true,
+//                             message: `Please Input ${title}!`,
+//                         },
+//                     ]}
+//                 >
+//                     {inputNode}
+//                 </Form.Item>
+//             ) : (
+//                 children
+//             )}
+//         </td>
+//     );
+// };
 const EditableTable = (props)=> {
     console.log(props.givendata);
-    let predata = props.givendata;
+    const predata = props.givendata;
     const [form] = Form.useForm();
     const [data, setData] = useState(predata);
-
+    // const data = props.givendata;
     console.log(data);
     const [editingKey, setEditingKey] = useState('');
 
-    const isEditing = (record: Item) => record.key === editingKey;
+    const isEditing = (record) => record.id === editingKey;
 
-    const edit = (record: Partial<Item> & { key: React.Key }) => {
+    // const edit = (record: Partial<Item> & { key: React.Key }) => {
+    //     form.setFieldsValue({
+    //         name: '',
+    //         author: '',
+    //         type: '',
+    //         price: '',
+    //         inventory: '', ...record
+    //     });
+    //     setEditingKey(record.key);
+    // };
+
+    const edit = (record) => {
         form.setFieldsValue({
             name: '',
             author: '',
@@ -78,27 +116,58 @@ const EditableTable = (props)=> {
             price: '',
             inventory: '', ...record
         });
-        setEditingKey(record.key);
+        setEditingKey(record.id);
     };
+
 
     const cancel = () => {
         setEditingKey('');
     };
 
-    const save = async (key: React.Key) => {
+    // const save = async (key: React.Key) => {
+    //     try {
+    //         const row = (await form.validateFields())
+    //
+    //         const newData = [...data];
+    //         const index = newData.findIndex((item) => key === item.key);
+    //         if (index > -1) {
+    //             const item = newData[index];
+    //             newData.splice(index, 1, {
+    //                 ...item,
+    //                 ...row,
+    //             });
+    //             // setData(newData);
+    //             setEditingKey('');
+    //             console.log(item);
+    //         } else {
+    //             newData.push(row);
+    //             // setData(newData);
+    //             setEditingKey('');
+    //         }
+    //     } catch (errInfo) {
+    //         console.log('Validate Failed:', errInfo);
+    //     }
+    // };
+    const save = async (id) => {
         try {
-            const row = (await form.validateFields())
+            const row = await form.validateFields();
+            const newData = props.givendata;
+            const index = newData.findIndex((item) => id === item.id);
 
-            const newData = [...data];
-            const index = newData.findIndex(item => key === item.key);
             if (index > -1) {
                 const item = newData[index];
-                newData.splice(index, 1, {
-                    ...item,
-                    ...row,
-                });
+                newData.splice(index, 1, { ...item, ...row });
                 setData(newData);
                 setEditingKey('');
+
+                const callback =  (data) => {
+                };
+                const newitem =  newData[index];
+                console.log(newitem);
+                updateBook(newitem, callback);
+                // Window.location.reload();
+
+
             } else {
                 newData.push(row);
                 setData(newData);
@@ -109,6 +178,20 @@ const EditableTable = (props)=> {
         }
     };
 
+    const deleteBook = (id) => {
+        try {
+            console.log(id);
+            const callback =  (data) => {
+            };
+            deleteOne(id,callback);
+            window.location.reload();
+
+        }
+
+        catch (errInfo) {
+            console.log('Validate Failed:', errInfo);
+        }
+    }
 
     const columns = [
         {
@@ -155,34 +238,41 @@ const EditableTable = (props)=> {
             editable: true,
         },
         {
-            title: 'operation',
+            title: '操作',
             dataIndex: 'operation',
-            render: (_: any, record: Item) => {
+            render: (_, record) => {
                 const editable = isEditing(record);
                 return editable ? (
                     <span>
-            <a href="javascript:;" onClick={() => save(record.key)} style={{marginRight: 8}}>
-              Save
+            <a href="http://localhost:3000/bookList" onClick={() => save(record.id)} style={{marginRight: 8}}>
+              保存
             </a>
             <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
+              <a>取消</a>
             </Popconfirm>
           </span>
                 ) : (
+                    <Space size = "middle">
                     <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-                        Edit
+                        编辑
                     </Typography.Link>
+                    <Popconfirm title="确认要删除这本书吗？" onConfirm={() => deleteBook(record.id)}>
+                    <Typography.Link>
+                        删除
+                    </Typography.Link>
+                    </Popconfirm>
+                    </Space>
                 );
             },
         },
     ];
-    const mergedColumns = columns.map(col => {
+    const mergedColumns = columns.map((col) => {
         if (!col.editable) {
             return col;
         }
         return {
             ...col,
-            onCell: (record: Item) => ({
+            onCell: (record) => ({
                 record,
                 inputType: col.dataIndex === 'inventory' ? 'number' : 'text',
                 dataIndex: col.dataIndex,
@@ -202,7 +292,7 @@ const EditableTable = (props)=> {
                     },
                 }}
                 bordered
-                dataSource={data}
+                dataSource={props.givendata}
                 columns={mergedColumns}
                 rowClassName="editable-row"
                 pagination={{
@@ -219,20 +309,26 @@ export class BookList extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            data: this.props.initialData,
+            datasource: null,
             search: false,
             searchData: null,
         };
-
-
     }
+    componentDidMount() {
 
+        const callback =  (data) => {
+            this.setState({datasource:data});
+        };
+
+        getBooks({"search":null}, callback);
+        console.log(this.state.datasource);
+    }
 
 
 
     handleTitleSearch = (input) => {
         if(this.state.search == false) {
-            let f = this.props.initialData.filter(book => book.name.match(input));
+            let f = this.state.datasource.filter(book => book.name.match(input));
             this.setState({searchData: f,search: true});
             console.log(this.state.searchData);
         }
@@ -258,7 +354,7 @@ export class BookList extends React.Component{
                <div className={"content"}>
                    <Search placeholder="input search text" onSearch={this.handleTitleSearch} style={{ width: 200 }} />
 
-                   <EditableTable givendata={this.state.data} />
+                   <EditableTable givendata={this.state.datasource} />
                </div>
 
            )

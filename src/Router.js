@@ -9,7 +9,10 @@ import {BookPage} from "./view/BookPage"
 import {BookListPage} from "./view/BookListPage";
 import CartPage from "./view/CartPage";
 import {OrderPage} from "./view/OrderPage";
-
+import {LoginRoute} from "./LoginRoute"
+import PrivateRoute from "./PrivateRoute";
+import {OrderListPage} from "./view/OrderListPage";
+import {UserListPage} from "./view/UserListPage";
 
 class BasicRoute extends React.Component{
 
@@ -26,13 +29,15 @@ class BasicRoute extends React.Component{
         return(
             <Router history={history}>
                 <Switch>
-                    <Route exact path="/" component={HomePage} />
-                    <Route exact path="/login" component={LoginPage} />
+                    <PrivateRoute exact path="/" component={HomePage} />
+                    <LoginRoute exact path="/login" component={LoginPage} />
                     <Route exact path="/bookDetails" component={BookPage} />
                     <Route exact path="/bookList" component={BookListPage} />
                     <Route exact path="/cart" component={CartPage}/>
                     <Route exact path="/orders" component={OrderPage}/>
-                    {/*<Redirect from="/*" to="/" />*/}
+                    <Route exact path="/orderList" component={OrderListPage}/>
+                    <Route exact path="/userList" component={UserListPage}/>
+                    <Redirect from="/*" to="/" />
                 </Switch>
 
             </Router>

@@ -44,7 +44,10 @@ export class OrderPage extends React.Component{
 
     constructor(props) {
         super(props);
-
+        this.state = {bookInfo:this.props.location.state,
+        };
+       // let data = this.props.location.state;
+        console.log(this.state.bookInfo);
 
     }
 
@@ -61,7 +64,7 @@ export class OrderPage extends React.Component{
                     <Content style={{ padding: '0 16px' }}>
                         <div className="home-content">
                             <div className="myOrders">
-                                <Orders />
+                                <Orders data={this.state.bookInfo}/>
                             </div>
                             <div className={"foot-wrapper"}>
                             </div>

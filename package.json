@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.12.17",
+    "config": "^3.3.6",
     "customize-cra": "^1.0.0"
   },
   "babel": {

@@ -56,10 +56,14 @@ export class SiderDemo extends React.Component {
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="4" icon={<CarryOutOutlined />}>
+                            <Link to="/orderList">
                             订单管理
+                            </Link>
                         </Menu.Item>
                         <Menu.Item key="5" icon={<UserOutlined />}>
+                            <Link to="/userList">
                             用户管理
+                            </Link>
                         </Menu.Item>
                         {/*<SubMenu key="sub1" icon={<UserOutlined />} title="User">*/}
                         {/*    <Menu.Item key="3">Tom</Menu.Item>*/}

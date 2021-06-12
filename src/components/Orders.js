@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Table, Button,Typography} from 'antd';
 import { Descriptions } from 'antd';
 import { Row, Col } from 'antd';
+import {addIntoCart, getCart} from "../service/cartService";
+import {addOrder} from "../service/orderService";
 const { Text } = Typography;
 const columns = [
     {
         title: '商品信息',
-        dataIndex: 'info',
+        dataIndex: 'bookTitle',
     },
     {
         title: '单价',
@@ -18,37 +20,78 @@ const columns = [
     },
     {
         title: '总价',
-        dataIndex: 'total',
+        dataIndex: 'totalPrice',
     },
 
 ];
 
-let data = [
-    {
-        key:1,
-        info:"Book 1",
-        price:32,
-        number:1,
-        total:32,
-    },
-    {
-        key:2,
-        info:"Book 2",
-        price:32,
-        number:1,
-        total:32,
-    },
-    {
-        key:3,
-        info:"Book 3",
-        price:32,
-        number:1,
-        total:32,
-    },
-]
-
+// let data = [
+//     {
+//         key:1,
+//         info:"Book 1",
+//         price:32,
+//         number:1,
+//         total:32,
+//     },
+//     {
+//         key:2,
+//         info:"Book 2",
+//         price:32,
+//         number:1,
+//         total:32,
+//     },
+//     {
+//         key:3,
+//         info:"Book 3",
+//         price:32,
+//         number:1,
+//         total:32,
+//     },
+// ]
 
 export class Orders extends React.Component{
+
+
+
+    constructor(props) {
+        super(props);
+        let username = localStorage.getItem("username");
+
+        let array = this.props.data;
+        let sumprice = array.reduce(function (total, currentValue, currentIndex, arr) {
+            return total + currentValue.price;
+        }, 0);
+        console.log('for reduce sumprice',sumprice);
+
+
+        this.state={
+            totalMoney:sumprice,
+            username:username,
+        }
+    }
+
+    onAddOrder = () => {
+       // let user = localStorage.getItem("user");
+        let user_id = parseInt(localStorage.getItem("userId"));
+        let username = localStorage.getItem("username")
+        let time = new Date();
+        let changetime=time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate() + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
+
+        console.log(user_id);
+        console.log(changetime);
+        addOrder(user_id,username,"上海交通大学",this.state.totalMoney,0,changetime);
+    };
+    // componentDidMount() {
+    //
+    //
+    //
+    //     const callback =  (data) => {
+    //         this.setState({items:data});
+    //     };
+    //     let user_id = parseInt(localStorage.getItem("userId"));
+    //
+    // }
+
 
 render() {
     return (
@@ -56,16 +99,16 @@ render() {
         <div>
         <Table
             columns={columns}
-            dataSource={data}
+            dataSource={this.props.data}
             pagination={false}
             bordered
             summary={pageData => {
                 let totalNumber = 0;
-                let totalPrice = 0;
+                let money =  0;
 
-                pageData.forEach(({ number, total }) => {
+                pageData.forEach(({ number, totalPrice }) => {
                     totalNumber += number;
-                    totalPrice += total;
+                    money += totalPrice;
                 });
 
                 return (
@@ -77,7 +120,7 @@ render() {
                                 <Text type="danger">{totalNumber}</Text>
                             </Table.Summary.Cell>
                             <Table.Summary.Cell>
-                                <Text type="danger">{totalPrice}</Text>
+                                <Text type="danger">{money.toFixed(2)}</Text>
                             </Table.Summary.Cell>
                         </Table.Summary.Row>
 
@@ -92,10 +135,10 @@ render() {
             bordered
         >
 
-            <Descriptions.Item label="用户">用户名</Descriptions.Item>
+            <Descriptions.Item label="用户">{this.state.username}</Descriptions.Item>
             <Descriptions.Item label="收货地址" span={2}>上海交通大学</Descriptions.Item>
             <Descriptions.Item label="付款方式" >支付宝</Descriptions.Item>
-            <Descriptions.Item label="金额">96.00元</Descriptions.Item>
+            <Descriptions.Item label="金额">{this.state.totalMoney.toFixed(2)}</Descriptions.Item>
             <Descriptions.Item label="配送方式">普通快递</Descriptions.Item>
             <Descriptions.Item label="备注">
                 12345
@@ -103,7 +146,7 @@ render() {
         </Descriptions>
     </div>
             <div className="confirm">
-                <Button type="primary" size="large">下订单</Button>
+                <Button onClick={this.onAddOrder} type="primary" size="large">下订单</Button>
 
             </div>
 

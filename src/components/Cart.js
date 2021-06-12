@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import { Table, Button,Typography} from 'antd';
 import "../css/cart.css"
 import {Link} from "react-router-dom";
+import {getCart} from "../service/cartService";
+import {getBooks} from "../service/bookService";
 const { Text } = Typography;
 const columns = [
     {
         title: '商品信息',
-        dataIndex: 'info',
+        dataIndex: 'bookTitle',
     },
     {
         title: '单价',
@@ -19,21 +21,21 @@ const columns = [
     },
     {
         title: '总价',
-        dataIndex: 'total',
+        dataIndex: 'totalPrice',
     },
 
 ];
 
-const data = [];
-for (let i = 0; i < 46; i++) {
-    data.push({
-        key: i,
-        info: `Book ${i}`,
-        price: 32,
-        number: 1,
-        total: 32,
-    });
-}
+// const data = [];
+// for (let i = 0; i < 46; i++) {
+//     data.push({
+//         key: i,
+//         info: `Book ${i}`,
+//         price: 32,
+//         number: 1,
+//         total: 32,
+//     });
+// }
 
 
 
@@ -41,12 +43,34 @@ for (let i = 0; i < 46; i++) {
 
 export class Cart extends React.Component{
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            items:[],
+            selectedRowKeys: [], // Check here to configure the default column
+            loading: false,
+            totalprice: 0,
+            selectedItems:[],};
 
-    state = {
-        selectedRowKeys: [], // Check here to configure the default column
-        loading: false,
-        totalprice: 0,
-    };
+    }
+
+    componentDidMount() {
+
+        const callback =  (data) => {
+            this.setState({items:data});
+        };
+        let user_id = parseInt(localStorage.getItem("userId"));
+        getCart(user_id,callback);
+
+    }
+
+
+
+    // state = {
+    //     selectedRowKeys: [], // Check here to configure the default column
+    //     loading: false,
+    //     totalprice: 0,
+    // };
 
     start = () => {
         this.setState({ loading: true });
@@ -64,9 +88,11 @@ export class Cart extends React.Component{
         console.log(selectedRowKeys[0]);
         this.setState({ selectedRowKeys });
         this.state.totalprice = 0;
+        this.state.selectedItems=[];
         for (var i=0;i<selectedRowKeys.length;i++)
         {
-            this.state.totalprice += data[selectedRowKeys[i]].total;
+            this.state.totalprice += this.state.items[selectedRowKeys[i]].totalPrice;
+            this.state.selectedItems.push(this.state.items[selectedRowKeys[i]]);
         }
 
 
@@ -79,7 +105,7 @@ export class Cart extends React.Component{
             onChange: this.onSelectChange,
         };
         const hasSelected = selectedRowKeys.length > 0;
-
+        console.log(this.state.items);
 
         return (
             <div className="myCart">
@@ -90,17 +116,20 @@ export class Cart extends React.Component{
                     <span style={{ marginLeft: 8 }}>
             {hasSelected ? `选中 ${selectedRowKeys.length} 件商品` : ''}
           </span>
-                    <Link to="/orders">
+                    <Link to={{
+                        pathname: `/orders`,
+                        state: this.state.selectedItems
+                    }}>
                     <Button className="buyButton" type="primary" disabled={!hasSelected} loading={loading}>
                         确定购买
                     </Button>
                     </Link>
                     <span className="totalprice">
-                        总计{this.state.totalprice}元
+                        总计{this.state.totalprice.toFixed(2)}元
                     </span>
                 </div>
                 <Table
-                    rowSelection={rowSelection} columns={columns} dataSource={data} />
+                    rowSelection={rowSelection} columns={columns} dataSource={this.state.items} />
             </div>
         );
     }

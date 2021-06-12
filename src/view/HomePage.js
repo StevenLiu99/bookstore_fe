@@ -13,7 +13,9 @@ export class HomePage extends React.Component{
 
     constructor(props) {
         super(props);
+        let user = localStorage.getItem("user");
 
+        console.log(user);
     }
     render(){
         return(
