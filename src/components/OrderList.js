@@ -1,32 +1,36 @@
 
 import React, { useState } from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Typography,Space } from 'antd';
-import {getOrder} from "../service/orderService";
+import {Table, Input, InputNumber, Popconfirm, Form, Typography, Space, List} from 'antd';
+import {getAllOrders, getOrder} from "../service/orderService";
 
 const columns = [
     {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
+        title: '订单编号',
+        dataIndex: 'orderID',
+        key: 'orderID',
+    },
+    {
+        title: '书籍名称',
+        dataIndex: 'bookTitles',
+        key: 'bookTitles',
+        render:(record)=>
+            <Space>{record}</Space>
 
     },
     {
-        title: 'Total Price',
+        title: '用户名',
+        dataIndex: 'username',
+        key: 'username',
+
+    },
+    {
+        title: '总价',
         dataIndex: 'totalPrice',
         key: 'totalPrice',
     },
+
     {
-        title: 'Address',
-        dataIndex: 'addr',
-        key: 'addr',
-    },
-    {
-        title: 'State',
-        dataIndex: 'state',
-        key:'state',
-    },
-    {
-        title: 'Time',
+        title: '时间',
         key: 'time',
         dataIndex: 'time',
 
@@ -48,8 +52,14 @@ export class OrderList extends React.Component{
             this.setState({datasource:data});
         };
         let user_id = parseInt(localStorage.getItem("userId"));
+        let user_type = parseInt(localStorage.getItem("userType"));
         console.log(user_id);
-        getOrder(user_id, callback);
+        console.log(user_type);
+        if (user_type === 0){
+            getAllOrders({},callback);
+        }
+        else {getOrder(user_id, callback);}
+
 
     }
 

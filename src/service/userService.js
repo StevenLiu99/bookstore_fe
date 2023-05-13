@@ -37,7 +37,8 @@ export const login = (data) => {
         if(data.status >= 0) {
             localStorage.setItem('user', JSON.stringify(data.data));
             localStorage.setItem('userId',JSON.stringify(data.data["userId"]));
-            localStorage.setItem('username',JSON.stringify(data.data["username"]))
+            localStorage.setItem('username',JSON.stringify(data.data["username"]));
+            localStorage.setItem('userType',JSON.stringify(data.data["userType"]))
             history.push("/");
             message.success(data.msg);
         }

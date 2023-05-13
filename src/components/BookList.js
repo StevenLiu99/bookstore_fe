@@ -43,50 +43,9 @@ const EditableCell = ({
     );
 };
 
-// interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-//     editing: boolean;
-//     dataIndex: string;
-//     title: any;
-//     inputType: 'number' | 'text';
-//     record: Item;
-//     index: number;
-//     children: React.ReactNode;
-// }
-//
-// const EditableCell: React.FC<EditableCellProps> = ({
-//                                                        editing,
-//                                                        dataIndex,
-//                                                        title,
-//                                                        inputType,
-//                                                        record,
-//                                                        index,
-//                                                        children,
-//                                                        ...restProps
-//                                                    }) => {
-//     const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-//
-//     return (
-//         <td {...restProps}>
-//             {editing ? (
-//                 <Form.Item
-//                     name={dataIndex}
-//                     style={{ margin: 0 }}
-//                     rules={[
-//                         {
-//                             required: true,
-//                             message: `Please Input ${title}!`,
-//                         },
-//                     ]}
-//                 >
-//                     {inputNode}
-//                 </Form.Item>
-//             ) : (
-//                 children
-//             )}
-//         </td>
-//     );
-// };
+
 const EditableTable = (props)=> {
+    let user_type = parseInt(localStorage.getItem("userType"));
     console.log(props.givendata);
     const predata = props.givendata;
     const [form] = Form.useForm();
@@ -192,6 +151,51 @@ const EditableTable = (props)=> {
             console.log('Validate Failed:', errInfo);
         }
     }
+    const columns_user = [
+        {
+            title: '封面',
+            dataIndex: 'image',
+            key: 'image',
+            render:(record)=><img src={record} width="100px" />,
+            editable: true,
+
+        },
+        {
+            title: '书名',
+            dataIndex: 'name',
+            key: 'name',
+            editable: true,
+
+        },
+        {
+            title: '作者',
+            dataIndex: 'author',
+            key: 'author',
+            editable: true,
+        },
+        {
+            title: 'ISBN号',
+            dataIndex: 'isbn',
+            key: 'isbn',
+            editable: true,
+        },
+        {
+            title: '定价',
+            dataIndex: 'price',
+            key: 'price',
+            defaultSortOrder: 'ascend',
+            sorter: (a, b) => a.price - b.price,
+            editable: true,
+        },
+        {
+            title: '库存',
+            dataIndex: 'inventory',
+            key: 'inventory',
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.inventory - b.inventory,
+            editable: true,
+        },
+    ]
 
     const columns = [
         {
@@ -199,7 +203,7 @@ const EditableTable = (props)=> {
             dataIndex: 'image',
             key: 'image',
             render:(record)=><img src={record} width="100px" />,
-            editable: false,
+            editable: true,
 
         },
         {
@@ -285,7 +289,8 @@ const EditableTable = (props)=> {
 
     return (
         <Form form={form} component={false}>
-            <Table
+            {user_type === 0
+                ? <Table
                 components={{
                     body: {
                         cell: EditableCell,
@@ -299,6 +304,16 @@ const EditableTable = (props)=> {
                     onChange: cancel,
                 }}
             />
+                :
+                <Table
+
+                    bordered
+                    dataSource={props.givendata}
+                    columns={columns_user}
+
+                />
+            }
+
         </Form>
     )
 }

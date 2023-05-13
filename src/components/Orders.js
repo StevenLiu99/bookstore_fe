@@ -59,7 +59,7 @@ export class Orders extends React.Component{
 
         let array = this.props.data;
         let sumprice = array.reduce(function (total, currentValue, currentIndex, arr) {
-            return total + currentValue.price;
+            return total + currentValue.totalPrice;
         }, 0);
         console.log('for reduce sumprice',sumprice);
 
@@ -75,11 +75,19 @@ export class Orders extends React.Component{
         let user_id = parseInt(localStorage.getItem("userId"));
         let username = localStorage.getItem("username")
         let time = new Date();
+        let orderId = '';
+        for (var i = 0; i < 6; i++) //6位随机数，用以加在时间戳后面。
+        {
+            orderId += Math.floor(Math.random() * 10);
+        }
+        orderId = time.getTime() + orderId;
         let changetime=time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate() + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
-
+        console.log(orderId);
         console.log(user_id);
         console.log(changetime);
-        addOrder(user_id,username,"上海交通大学",this.state.totalMoney,0,changetime);
+        // const data = {books:this.props.data,user_id: user_id ,orderId:orderId, username:username,totalPrice:this.state.totalMoney,state:0,time:changetime};
+        console.log(this.state.totalMoney);
+        addOrder(this.props.data,user_id,orderId,username,this.state.totalMoney,0,changetime);
     };
     // componentDidMount() {
     //

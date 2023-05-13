@@ -11,6 +11,8 @@ import {
 } from '@ant-design/icons';
 import '../css/sider.css'
 import {Link} from "react-router-dom";
+import {LoginForm} from "./LoginForm";
+import {RegisterForm} from "./RegisterForm";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -21,6 +23,8 @@ export class SiderDemo extends React.Component {
         collapsed: false,
     };
 
+
+
     onCollapse = collapsed => {
         console.log(collapsed);
         this.setState({ collapsed });
@@ -29,6 +33,8 @@ export class SiderDemo extends React.Component {
     render() {
         const { collapsed } = this.state;
         const {selected} = this.props;
+        let user_type = parseInt(localStorage.getItem("userType"));
+
         return (
 
                 <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
@@ -46,7 +52,7 @@ export class SiderDemo extends React.Component {
 
                         <Menu.Item key="2" icon={<ReadOutlined />}>
                             <Link to="/bookList">
-                            书籍浏览
+                                {user_type === 0 ? "书籍管理":"书籍浏览"}
                             </Link>
                         </Menu.Item>
 
@@ -60,11 +66,14 @@ export class SiderDemo extends React.Component {
                             订单管理
                             </Link>
                         </Menu.Item>
-                        <Menu.Item key="5" icon={<UserOutlined />}>
+                        {user_type === 0 ?
+                            <Menu.Item key="5" icon={<UserOutlined />}>
                             <Link to="/userList">
-                            用户管理
+                                用户管理
                             </Link>
-                        </Menu.Item>
+                            </Menu.Item>
+                            :<div></div>}
+
                         {/*<SubMenu key="sub1" icon={<UserOutlined />} title="User">*/}
                         {/*    <Menu.Item key="3">Tom</Menu.Item>*/}
                         {/*    <Menu.Item key="4">Bill</Menu.Item>*/}

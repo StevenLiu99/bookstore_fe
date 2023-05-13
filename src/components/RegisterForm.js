@@ -37,6 +37,7 @@ const tailFormItemLayout = {
 export class RegisterForm extends React.Component{
 
 
+
    onFinish = (values) => {
         console.log('Received values of form: ', values);
         userService.register(values);

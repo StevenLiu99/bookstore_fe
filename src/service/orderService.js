@@ -9,9 +9,15 @@ export const getOrder = (uid, callback) => {
     const url = `${config.apiUrl}/getOrder`;
     postRequest_v2(url, data, callback);
 };
+export const getAllOrders =(data,callback)=>{
+    const url = `${config.apiUrl}/getAllOrder`;
+    postRequest(url, data, callback);
+}
 
-export const addOrder = (uid,username,addr,totalprice,state,time) => {
-    const data = {user_id: uid , username:username,addr:addr,totalPrice:totalprice,state:state,time:time};
+
+export const addOrder = (books,uid,orderId,username,totalprice,state,time) => {
+    const data = {books:books,user_id: uid ,orderId:orderId, username:username,totalPrice:totalprice,state:state,time:time};
+    console.log(data);
     const callback = (data) => {
         if(data.status >= 0) {
             message.success(data.msg);

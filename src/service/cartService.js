@@ -22,5 +22,6 @@ export const addIntoCart = (uid,bid) => {
     };
     const url = `${config.apiUrl}/addIntoCart`;
     postRequest(url, data, callback);
+    message.success("添加成功！");
 
 };
